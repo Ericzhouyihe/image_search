@@ -2,4 +2,5 @@
 .idea/
 
 /common/dataset/*
+/common/fashion-labels.csv
 /.venv/
