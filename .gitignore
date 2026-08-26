@@ -1,5 +1,9 @@
 # ide
 .idea/
+.vscode/
+.claude/
+.codex/
+.zcode/
 
 /common/dataset/*
 /common/fashion-labels.csv
