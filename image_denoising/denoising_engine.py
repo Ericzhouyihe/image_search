@@ -1,5 +1,5 @@
 # 定义模块的公开接口
-__all__ = ["train_step", "val_step", "create_embedding"]
+__all__ = ["train_step", "val_step", "create_embedding"]  # noqa: F822, RUF022
 
 # 导入PyTorch核心库和神经网络模块
 import torch
