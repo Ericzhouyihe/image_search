@@ -5,8 +5,8 @@
 .codex/
 .zcode/
 
+.venv/
 __pycache__
-/.venv/*
 /common/dataset/*
 *.csv
 *.pt
