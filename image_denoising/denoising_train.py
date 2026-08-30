@@ -24,7 +24,6 @@ def test(denoiser, val_loader, device):
     # 从验证数据加载器中获取一个批次的测试图像
     dataiter = iter(val_loader)  # 创建验证数据加载器的迭代器
     noisy_images, original_images = next(dataiter)  # 获取下一个批次的数据（图像和标签）
-
     print("测试集 images 形状: ", noisy_images.shape)  # 打印图像的形状，通常是 (batch_size, channels, height, width)
 
     denoiser = denoiser.to(device)  # 将模型移动到指定的设备
@@ -43,7 +42,7 @@ def test(denoiser, val_loader, device):
 
     # 将输出调整为批次图像的形状
     output = output.view(
-        denoising_config.TEST_BATCH_SIZE, 3, 68, 68
+        denoising_config.TEST_BATCH_SIZE, 3, 64, 64
     )  # 将输出张量调整为 (batch_size, channels, height, width) 的形状
     # 使用 detach() 分离梯度信息，并将其转换为 NumPy 数组
     output = output.detach().cpu().numpy()  # 将输出从 PyTorch 张量转换为 NumPy 数组
@@ -80,7 +79,7 @@ if __name__ == "__main__":
     utils.seed_everything(denoising_config.SEED)
 
     # 定义图像预处理流程
-    transforms = T.Compose([T.Resize((68, 68)), T.ToTensor()])
+    transforms = T.Compose([T.Resize((64, 64)), T.ToTensor()])
 
     # 打印日志，提示用户正在创建数据集
     print("------------ 正在创建数据集 ------------")
@@ -112,16 +111,12 @@ if __name__ == "__main__":
 
     # 初始化自编码器用于去噪
     denoiser = denoising_model.ConvDenoiser()  # 创建自编码器实例
-
     # 指定损失函数
     loss_fn = nn.MSELoss()
-
     # 将模型移动到指定设备（GPU/CPU）
     denoiser.to(device)
-
     # 指定优化器
     optimizer = torch.optim.Adam(denoiser.parameters(), lr=denoising_config.LEARNING_RATE)
-
     # 初始化最佳损失值为极大值
     min_loss = 9999
 
@@ -154,16 +149,13 @@ if __name__ == "__main__":
     print("\n==========> 训练结束 <==========\n")
 
     print("本次训练的去噪模型测试结果如下")
-
     test(denoiser, val_loader, device)
 
     print("================> 从磁盘加载模型 <================")
 
     load_denoiser = denoising_model.ConvDenoiser()
     load_denoiser.load_state_dict(torch.load(denoising_config.DENOISER_MODEL_NAME, map_location=device))
-
     load_denoiser.to(device)
 
     print("从磁盘加载的去噪模型测试结果如下")
-
     test(load_denoiser, val_loader, device)

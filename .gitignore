@@ -5,6 +5,8 @@
 .codex/
 .zcode/
 
+__pycache__
+/.venv/*
 /common/dataset/*
-/common/fashion-labels.csv
-/.venv/
+*.csv
+*.pt
