@@ -1,5 +1,5 @@
 # 定义模块的公开接口
-__all__ = ["train_step", "val_step"]
+__all__ = ["train_step", "val_step", "create_embedding"]
 
 # 导入PyTorch核心库和神经网络模块
 import torch
@@ -82,3 +82,33 @@ def val_step(encoder, decoder, val_loader, loss_fn, device):
             num_batches += 1
 
     return total_loss / num_batches
+
+
+def create_embedding(encoder, data_loader, device):
+    """
+    让编码器对全量数据集做一次前向传播，收集所有嵌入向量
+
+    参数:
+    - encoder: 卷积编码器（如ConvEncoder）
+    - data_loader: 全量数据加载器，提供批次化的（输入图像, 目标图像）
+    - device: 计算设备（"cuda" 或 "cpu"）
+
+    返回值:
+    - 形状为 (样本数, 512) 的嵌入张量
+    """
+
+    encoder.eval()  # 切换到评估模式（如禁用Dropout/BatchNorm等）
+    all_embeddings = []  # 存放每个批次的嵌入
+
+    # 禁用梯度计算以节省内存和计算资源
+    with torch.no_grad():
+        for train_img, _ in data_loader:
+            train_img = train_img.to(device)
+
+            # 编码器输出潜在表示（当前批次）
+            enc_output = encoder(train_img)
+            # 将本批次结果移到CPU并收集
+            all_embeddings.append(enc_output.cpu())
+
+    # 沿第0维拼接所有批次得到完整嵌入
+    return torch.cat(all_embeddings, dim=0)

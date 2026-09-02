@@ -10,4 +10,9 @@ __pycache__
 /common/dataset/*
 *.csv
 *.pt
-*.pth
+*.jpg
+*.png
+*.bin
+*.sqlite3
+*.pickle
+*.npy

@@ -12,7 +12,7 @@ import torch
 
 import numpy
 
-from image_similarity import similarity_torch_model
+from image_similarity import similarity_model
 from image_similarity import similarity_config
 
 import chromadb
@@ -122,10 +122,10 @@ def search_similar_img_ids(collection, image_tensor, img_cnt):
 
 if __name__ == "__main__":
     print("正在加载嵌入模型")
-    encoder = similarity_torch_model.ConvEncoder()  # 初始化编码器
+    encoder = similarity_model.ConvEncoder()  # 初始化编码器
     # 加载编码器的预训练权重（自动处理设备映射）
     encoder.load_state_dict(
-        torch.load(os.path.join("..", similarity_config.SIMILARITY_PACKAGE_NAME, similarity_config.ENCODER_MODEL_NAME))
+        torch.load(os.path.join("..", similarity_config.PACKAGE_NAME, similarity_config.ENCODER_MODEL_NAME))
     )
     print("嵌入模型加载完毕")
 

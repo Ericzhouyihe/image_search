@@ -105,7 +105,7 @@ if __name__ == "__main__":
     # 生成嵌入阶段
     print("---- 对整个数据集创建嵌入 ---- ")
     # 调用函数生成所有数据的嵌入表示
-    embedding = similarity_engine.create_embedding(encoder, full_loader, similarity_config.EMBEDDING_NAME, device)
+    embedding = similarity_engine.create_embedding(encoder, full_loader, device)
 
     # 数据格式转换和保存
     numpy_embedding = embedding.cpu().detach().numpy()  # 转CPU并转numpy
@@ -114,4 +114,4 @@ if __name__ == "__main__":
     # 将高维嵌入展平为二维数组（样本数 x 特征维度）
     flattened_embedding = numpy_embedding.reshape((num_images, -1))
     # 保存到npy文件供后续使用
-np.save(similarity_config.EMBEDDING_NAME, flattened_embedding)
+    np.save(similarity_config.EMBEDDING_NAME, flattened_embedding)

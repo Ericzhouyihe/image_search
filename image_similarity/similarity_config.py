@@ -1,4 +1,6 @@
 # ------------ 数据路径与预处理配置 ------------
+from pathlib import Path  # noqa: E402
+
 IMG_PATH = "../common/dataset/"  # 原始图像存储根目录（需确保存在子目录）
 IMG_HEIGHT = 64
 IMG_WIDTH = 64
@@ -22,4 +24,7 @@ CHROMA_INSERT_BATCH = 5000  # Chroma 限制单次插入数据不能超过 5000
 PACKAGE_NAME = "image_similarity"
 ENCODER_MODEL_NAME = "deep_encoder.pt"  # 编码器权重保存路径（需写权限）
 DECODER_MODEL_NAME = "deep_decoder.pt"  # 解码器权重保存路径（需写权限）
-CHROMA_BACKEND_PATH = "chroma_backend"  # 特征嵌入存储路径
+EMBEDDING_NAME = "image_similarity_embeddings.npy"  # 全量数据嵌入向量的保存路径（.npy格式）
+
+# 特征嵌入存储路径（绝对路径，锚定到 image_similarity 包目录，避免随工作目录变化）
+CHROMA_BACKEND_PATH = str(Path(__file__).resolve().parent / "chroma_backend")
