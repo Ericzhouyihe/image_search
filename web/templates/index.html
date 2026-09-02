@@ -3,246 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智图寻宝</title>
+    <title>智能商品识别系统</title>
     <style>
-        :root {
-            --primary-color: #e5e9ed;
-            --success-color: #67C23A;
-            --warning-color: #E6A23C;
-            --danger-color: #F56C6C;
-            --text-color: #303133;
-            --border-color: #161617;
-            --container-padding: 40px;
+        * {
+            box-sizing: border-box;
         }
 
         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
-            background: #f5f7fa;
         }
 
         body {
             font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .company-logo {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            height: 50px;
-            z-index: 100;
-            padding: 8px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.08);
+            background: #f5f6f7;
+            color: #1f2329;
+            display: flex;
+            justify-content: center;
+            padding: 32px 16px;
         }
 
         .container {
-            max-width: 1400px;
             width: 100%;
-            margin: 30px auto 0;
-            background: white;
-            padding: var(--container-padding);
+            max-width: 1080px;
+            background: #fff;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            min-height: calc(100vh - 100px);
-            position: relative;
-            background-image: url("/pictures/bg.png");
-        }
-
-        .title-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            width: 100%;
-        }
-
-        .title-logo {
-            height: 40px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        .title-divider {
-            height: 40px;
-            width: 3px;
-            background-color: var(--border-color);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            padding: 36px 40px;
         }
 
         h1 {
-            font-size: 20px;
-            margin: 0;
-            padding-bottom: 0;
-            border-bottom: 0 solid var(--primary-color);
-            display: inline-block;
+            font-size: 22px;
+            font-weight: 600;
+            margin: 0 0 24px;
+        }
+
+        #image-upload {
+            display: block;
             width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 20px;
+            border: 1px solid #d9dce1;
+            border-radius: 8px;
+            background: #fafbfc;
+            font-size: 14px;
+            color: #1f2329;
+            cursor: pointer;
+        }
+
+        #image-upload:hover {
+            border-color: #8a919c;
         }
 
         .button-group {
             display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
-            width: 100%;
         }
 
-        .upload_button {
-            background-image: url('/pictures/upload-icon.png');
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            padding-left: 40px;
-        }
-
-        .denoising_button {
-            background-image: url('/pictures/denoise-icon.png');
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            padding-left: 40px;
-        }
-
-        .classification_button {
-            background-image: url('/pictures/classify-icon.png');
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            padding-left: 40px;
-        }
-
-        .similarity_button {
-            background-image: url('/pictures/similarity-icon.png');
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: 10px center;
-            padding-left: 40px;
-        }
-
-        /* 确保所有按钮变体都有背景 */
-        .upload_button,
-        .denoising_button,
-        .classification_button,
-        .similarity_button {
-            color: #574d4d;
-        }
-
-        button {
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-            border: none;
+        .button-group button {
             flex: 1;
-            min-width: 120px;
-            text-align: center;
-            background: linear-gradient(145deg, var(--primary-color), #314a67);
+            min-width: 110px;
+            padding: 10px 16px;
+            font-size: 14px;
+            border: 1px solid #d9dce1;
+            border-radius: 8px;
+            background: #fff;
+            color: #1f2329;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(145deg, #a9b9cc, var(--primary-color));
+        .button-group button:hover {
+            border-color: #1f2329;
+            background: #f5f6f7;
         }
 
         .preview-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 10px;
-            margin: 10px 0;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .preview-card h3 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            padding: 12px;
-            border-radius: 10px;
-            background: linear-gradient(145deg, #ffffff, #f8f9fa);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 0 8px;
+            color: #5a6069;
         }
 
-        .preview-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .preview-image,
-        .noised-image,
-        .denoising-image {
+        .preview-card img {
+            display: block;
             width: 100%;
-            height: 192px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: white;
+            height: 200px;
             object-fit: contain;
-            margin-bottom: 0;
-        }
-
-        #image-upload {
-            box-sizing: border-box;
-            width: 100%;
-            padding: 12px;
-            border: 2px dashed var(--border-color);
+            border: 1px solid #e6e8eb;
             border-radius: 8px;
-            margin-bottom: 25px;
-            transition: border-color 0.3s;
+            background: #fafbfc;
         }
 
-        #image-upload:hover {
-            border-color: #ed8308;
+        .section-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #5a6069;
+            margin: 0 0 8px;
         }
 
         #result-text {
-            box-sizing: border-box;
+            display: block;
             width: 100%;
-            padding: 15px;
-            border: 1px solid var(--border-color);
+            padding: 10px 12px;
+            margin-bottom: 24px;
+            border: 1px solid #e6e8eb;
             border-radius: 8px;
-            font-size: 16px;
-            min-height: 20px;
-            background: #f8f9fa;
+            font-size: 14px;
+            font-family: inherit;
+            color: #1f2329;
+            background: #fafbfc;
+            resize: none;
         }
 
         .similar-images {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            justify-content: space-between;
-            gap: 15px;
-            width: 100%;
+            gap: 12px;
         }
 
         .similar-images img {
+            display: block;
             width: 100%;
             height: 160px;
             object-fit: contain;
-            border-radius: 6px;
+            border: 1px solid #e6e8eb;
+            border-radius: 8px;
+            background: #fafbfc;
         }
 
+        @media (max-width: 768px) {
+            .preview-container {
+                grid-template-columns: 1fr;
+            }
+
+            .similar-images {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="/logo/logo.jpg" alt="Company Logo" class="company-logo">
-
-    <div class="title-container">
-        <img src="/pictures/智图寻宝.png" alt="智图寻宝" class="title-logo">
-        <div class="title-divider"></div>
-        <h1>智能商品识别系统</h1>
-    </div>
+    <h1>智能商品识别系统</h1>
 
     <input type="file" id="image-upload" accept="image/*">
 
     <div class="button-group">
-        <button id="upload_button" class="upload_button">上传图片</button>
-        <button id="denoising_button" class="denoising_button">图像去噪</button>
-        <button id="classification_button" class="classification_button">商品分类</button>
-        <button id="similarity_button" class="similarity_button">相似商品</button>
+        <button id="upload_button">上传图片</button>
+        <button id="denoising_button">图像去噪</button>
+        <button id="classification_button">商品分类</button>
+        <button id="similarity_button">相似商品</button>
     </div>
 
     <div class="preview-container">
@@ -260,12 +182,10 @@
         </div>
     </div>
 
-    <div>
-        <h3>分类结果</h3>
-        <textarea id="result-text" rows="1" readonly></textarea>
-    </div>
+    <p class="section-title">分类结果</p>
+    <textarea id="result-text" rows="1" readonly></textarea>
 
-    <h3>相似商品推荐</h3>
+    <p class="section-title">相似商品推荐</p>
     <div class="similar-images" id="similar-images"></div>
 </div>
 
